@@ -6,15 +6,15 @@ int potPin2 = 2;
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 void setup() {
-    Serial.begin(9600);
-    lcd.begin(16, 2);
-    //lcd.print("David is a dick");
+    Serial.begin(9600); //this is the rate for the serial monitor, can be changed, doesn't matter much.
+    lcd.begin(16, 2); //This is the LCD (Collums, Rows) so max 16 letters per row.
 }
-
 void loop() {
-  //lcd.setCursor(0, 1);
   int valPotLCD = 0;
   valPotLCD = analogRead(potPin); //Value goes from 0 to 1023 with potentiometers
+  //From here we treshhold values from the slider to display text on the LCD.
+  //However due to a 1k resistor being attached to the slider, the first threshold is larger
+  //Than the other... IDK if this is why, but my best guess. (It shoudl change around 1/3 of the way for each.
     if (valPotLCD > 0 && valPotLCD < 800){
       lcd.setCursor(0, 1);
       Serial.println("interval 1");
