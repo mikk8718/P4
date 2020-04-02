@@ -3,6 +3,8 @@
 
 int potPin = 1;
 int potPin2 = 2;
+int pauseBut = 4;
+int playBut = 5;
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 void setup() {
