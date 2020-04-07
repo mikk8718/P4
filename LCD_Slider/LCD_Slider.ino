@@ -19,6 +19,8 @@ void setup() {
 
     pinMode(button, INPUT);
     pinMode(button2, INPUT);
+    //digitalWrite(button, HIGH);
+    //digitalWrite(button2, LOW);
     mySerial.begin (9600);
     myMP3.begin(mySerial);
     delay(1000);
