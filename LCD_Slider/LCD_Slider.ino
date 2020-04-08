@@ -1,6 +1,6 @@
 #include <DFPlayerMini_Fast.h>
 #include <SoftwareSerial.h>
-SoftwareSerial mySerial(10, 11);
+SoftwareSerial mySerial(11, 10);
 ///
 #include <LiquidCrystal.h>
 
@@ -26,6 +26,7 @@ void setup() {
     delay(1000);
     myMP3.volume(30);
     delay(20);
+    
 
 }
 void loop() {
@@ -34,30 +35,33 @@ void loop() {
   //From here we treshhold values from the slider to display text on the LCD.
   //However due to a 1k resistor being attached to the slider, the first threshold is larger
   //Than the other... IDK if this is why, but my best guess. (It shoudl change around 1/3 of the way for each.
-    if (valPotLCD > 0 && valPotLCD < 869){
-      selectedTrack = 1;
+
+if (!myMP3.isPlaying()){
+  
+    
+    if (valPotLCD > 0 && valPotLCD < 169){
+      selectedTrack = 2;
       lcd.setCursor(0, 1);
       lcd.print("Adventure track ");
   }
-    if (valPotLCD > 869 && valPotLCD < 1023){
-      selectedTrack = 2;
+    if (valPotLCD > 169 && valPotLCD < 1023){
+      selectedTrack = 1;
       lcd.setCursor(0, 1);
       lcd.print("Journey track   ");
   }
-  //Serial.print(selectedTrack);
+}
 
-  if (digitalRead(button) == LOW){
-//      myMP3.play(selectedTrack);
-      Serial.print("LOW ");   
-  }
+  Serial.print(selectedTrack);
+
   if (digitalRead(button) == HIGH){
-//      myMP3.play(selectedTrack);
-      Serial.print("HIGH "); 
+    myMP3.play(selectedTrack);
+    Serial.print("play");
   }
-//  if (digitalRead(button2) == LOW){
-//    myMP3.reset();
-//    Serial.print("reset");
-//     }
+
+  if (digitalRead(button2) == HIGH){
+    myMP3.reset();
+    Serial.print("reset");
+     }
 lcd.setCursor(0, 0);
 lcd.print(valPotLCD);
 }
