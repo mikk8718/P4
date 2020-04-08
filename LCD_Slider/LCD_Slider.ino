@@ -3,7 +3,7 @@
 SoftwareSerial mySerial(11, 10);
 ///
 #include <LiquidCrystal.h>
-
+// This comment is here for no reason
 int potPin = 1;
 int potPin2 = 2;
 LiquidCrystal lcd(12, 9, 5, 4, 3, 2);
@@ -36,7 +36,7 @@ void loop() {
   //However due to a 1k resistor being attached to the slider, the first threshold is larger
   //Than the other... IDK if this is why, but my best guess. (It shoudl change around 1/3 of the way for each.
 
-if (!myMP3.isPlaying()){
+if (!myMP3.isPlaying()){ 
   
     
     if (valPotLCD > 0 && valPotLCD < 169){
