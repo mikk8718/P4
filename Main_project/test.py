@@ -1,10 +1,7 @@
 import wave
 import sounddevice as sd
+import scipy.io.wavfile as wave
 
-
-w = wave.open("testfile.wav")
-sd.play(w, 44100)
-
-
-
-
+samplingFreq, guitarSignal = wave.read("testfile.wav")
+sd.play(guitarSignal, samplingFreq)
+sd.wait()
