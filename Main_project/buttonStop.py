@@ -1,3 +1,8 @@
 import sounddevice as sd
+import os
 
-print("friends are overrated")
+
+def buttonStop(state):
+    if state == 1:
+        sd.stop()
+        os.remove("selectedTrack.wav")
