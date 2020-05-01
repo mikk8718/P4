@@ -3,16 +3,16 @@ import scipy.io.wavfile as wave
 
 #This comment is added in order to let me push :)
 
-def createTrack(sliderSong):
-    selectedTrack = sliderSong
-    return selectedTrack
 
-def createTrack2(sliderSong):
+samplingFreq1, signal1 = wave.read("testfile.wav")
+samplingFreq2, signal2 = wave.read("testfile.wav")
+samplingFreq3, signal3 = wave.read("testfile.wav")
+
+def createTrack(sliderSong):
     if sliderSong == 1:
-        selectedTrack = Soundfile1
+        wave.write("selectedTrack.wav",samplingFreq1,signal1)
     elif sliderSong == 2:
-        selectedTrack = Soundfile2
+        wave.write("selectedTrack.wav",samplingFreq2,signal2)
     elif sliderSong == 3:
-        selectedTrack = Soundfile3
-    return selectedTrack
+        wave.write("selectedTrack.wav",samplingFreq3,signal3)
 
