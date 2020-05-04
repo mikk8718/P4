@@ -18,7 +18,7 @@ def combfilter(inputSignal, samplingFreq, filterCoefficient, delay):
         else:
             outputSignal[n] = inputSignal[n]+filterCoefficient*outputSignal[n-d]
 
-    return outputSignal/max(outputSignal)
+    return outputSignal / max(outputSignal)
 
 
 def allpassfilter(inputSignal, samplingFreq, filterCoefficient):
@@ -55,6 +55,7 @@ def plainGainFromReverbTime(reverbTime, plainDelay, samplingFreq):
     for ii in np.arange(nDelays):
         plainGains[ii] = 10*(-3*plainDelays[ii]/(reverbTime*samplingFreq))
     return plainGains
+
 
 
 mixingParams = np.array([0.3, 0.25, 0.25, 0,20])
