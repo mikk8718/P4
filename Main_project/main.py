@@ -1,9 +1,10 @@
 import serial
 import re
-
+import sounddevice as sd
+import scipy.io.wavfile as wave
 
 data = serial.Serial("COM3", 115200)
-
+samplingFrequency, signal = wave.read("testfile.wav")
 
 def readInput(string):
     temp = 0
@@ -11,6 +12,8 @@ def readInput(string):
         temp = [int(i) for i in string if i.isdigit()]
         print("playButton = {}".format(temp[0]))
 
+        sd.play(signal, samplingFrequency)
+        sd.wait()
 
     elif "stopButton" in string:
         temp = [int(i) for i in string if i.isdigit()]
@@ -21,7 +24,6 @@ def readInput(string):
         print("selectedTrack = {}".format(temp[0]))
 
 
-
 while True:
 
     line = data.readline()
@@ -30,5 +32,6 @@ while True:
     #res = [int(i) for i in string if i.isdigit()]
     #print(string)
     readInput(string)
+
 
 
