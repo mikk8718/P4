@@ -1,49 +1,47 @@
-#include <DFPlayerMini_Fast.h>
 #include <SoftwareSerial.h>
-SoftwareSerial mySerial(11, 10);
-///
 #include <LiquidCrystal.h>
-// This comment is here for no reason
-int potPin = 1;
-int potPin2 = 2;
-LiquidCrystal lcd(12, 9, 5, 4, 3, 2);
+SoftwareSerial mySerial(11, 10);
 
+int potPinLCD = A1;
+int potPinVol = A5;
+int potPinEcho = A3;
+int potPinPitch = A4;
+LiquidCrystal lcd(12, 9, 5, 4, 3, 2);
 int button = 8;
 int button2 = 7;
 int selectedTrack;
-
-DFPlayerMini_Fast myMP3;
+int selectedEcho;
+int selectedPitch;
+int selectedVol;
 
 void setup() {
     Serial.begin(115200); //this is the rate for the serial monitor, can be changed, doesn't matter much.
     lcd.begin(16, 2); //This is the LCD (Collums, Rows) so max 16 letters per row.
-
     pinMode(button, INPUT);
     pinMode(button2, INPUT);
-    //digitalWrite(button, HIGH);
-    //digitalWrite(button2, LOW);
-    mySerial.begin (9600);
-    myMP3.begin(mySerial);
     delay(1000);
-    myMP3.volume(30);
-    delay(20);
-    
-
+   
 }
 void loop() {
   int valPotLCD = 0;
-  valPotLCD = analogRead(potPin); //Value goes from 0 to 1023 with potentiometers
+  int valPotVol = 0;
+  int valPotEcho = 0;
+  int valPotPitch = 0;
+  valPotLCD = analogRead(potPinLCD);
+  valPotVol = analogRead(potPinVol);
+  valPotEcho = analogRead(potPinEcho);
+  valPotPitch = analogRead(potPinPitch); //Value goes from 0 to 1023 with potentiometers
   //From here we treshhold values from the slider to display text on the LCD.
   //However due to a 1k resistor being attached to the slider, the first threshold is larger
-  //Than the other... IDK if this is why, but my best guess. (It shoudl change around 1/3 of the way for each.
+  //Than the other... IDK if this is why, but my best guess. (It should change around 1/3 of the way for each.
 
-    
-  if (valPotLCD > 0 && valPotLCD < 130){
+//LCD------------------------------------
+  if (valPotLCD > 0 && valPotLCD < 150){
     selectedTrack = 3;
     lcd.setCursor(0, 1);
     lcd.print("Adventure track ");
   }
-  if (valPotLCD > 130 && valPotLCD < 275){
+  if (valPotLCD > 150 && valPotLCD < 275){
     selectedTrack = 2;
     lcd.setCursor(0, 1);
     lcd.print("Journey track   ");
@@ -53,27 +51,60 @@ void loop() {
     lcd.setCursor(0, 1);
     lcd.print("Mikkel track   ");
   }
+//Volume-------------------------------------
 
-//Serial.print(selectedTrack);
+   if (valPotVol > 0 && valPotVol < 341){
+      selectedVol = 1;
+   }
+   if (valPotVol > 341 && valPotVol < 682){
+      selectedVol = 2;
+   }
+   if (valPotVol > 682 && valPotVol < 1023){
+      selectedVol = 3;
+   }
+   
+//Echo----------------------------------------
+ if (valPotEcho > 0 && valPotEcho < 341){
+    selectedEcho = 1;
+ }
+ if (valPotEcho > 341 && valPotEcho < 682){
+    selectedEcho = 2;
+ }
+ if (valPotEcho > 682 && valPotEcho < 1023){
+    selectedEcho = 3;
+ }
 
+//Pitch---------------------------------------
+  if (valPotPitch > 0 && valPotPitch < 341){
+    selectedPitch = 1;
+ }
+  if (valPotPitch > 341 && valPotPitch < 682){
+    selectedPitch = 2;
+ }
+  if (valPotPitch > 682 && valPotPitch < 1023){
+    selectedPitch = 3;
+ }
+    
   if (digitalRead(button) == HIGH){
-    myMP3.play(selectedTrack);
-    //Serial.print("play");
-    Serial.print("playButton");
-    Serial.println(1);
     Serial.print("selectedTrack");
     Serial.println(selectedTrack);
+    Serial.print("selectedVol");
+    Serial.println(selectedVol);
+    Serial.print("selectedEcho");
+    Serial.println(selectedEcho);
+    Serial.print("selectedPitch");
+    Serial.println(selectedPitch);
+    Serial.print("playButton");
+    Serial.println(1);
     delay(1000);
     }
   
   if (digitalRead(button2) == HIGH){
-    myMP3.reset();
-    //Serial.print("reset");
     Serial.print("stopButton");
     Serial.println(1);
     delay(1000);
   }
   
   lcd.setCursor(0, 0);
-  lcd.print(valPotLCD);
+  lcd.print(valPotVol);
 }
