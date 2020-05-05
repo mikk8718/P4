@@ -3,12 +3,15 @@ import scipy.io.wavfile as wave
 import numpy as np
 
 
+#delay, in all the functions, has to be given in amount of samples, not ms.
 
+#Lines 9-10 are for testing purpose, remove when using in main
 samplef, signal = wave.read("guitar.wav")
-signal = signal/2**15 # normalise
+signal = signal/max(signal) #normalizing the signal
+
 
 def combfilter(inputSignal, filterCoefficient, delay):
-    #d = np.int(np.round(delay*samplingFreq))
+
     signalLenght = np.size(inputSignal)
     outputSignal = np.zeros(signalLenght)
 
@@ -22,10 +25,10 @@ def combfilter(inputSignal, filterCoefficient, delay):
 
 
 def allpassfilter(inputSignal, filterCoefficient, delay):
-    #d = np.int(np.round(delay * samplingFreq))
+
     signalLenght = np.size(inputSignal)
     outputSignal = np.zeros(signalLenght)
-    #print(d)
+
     for n in np.arange(signalLenght):
         if n < delay:
             outputSignal[n] = inputSignal[n]
@@ -49,30 +52,21 @@ def reverb(inputSignal, mixingParameters, combDelays, combFilterParams, allPassD
 
     return outputSignal
 
-def plainGainFromReverbTime(reverbTime, plainDelay, samplingFreq):
-    nDelays = np.size(plainDelay)
-    plainGains = np.zeros(nDelays)
-    for ii in np.arange(nDelays):
-        plainGains[ii] = 10**(-3*plainDelay[ii]/(reverbTime*samplingFreq))
-    return plainGains
+
+def combFiltersParametersFromReverbTime(reverbTime, combDelays, samplingFreq):
+    combeDelaysNrs = np.size(combDelays)
+    combFilterParams = np.zeros(combeDelaysNrs)
+    for n in np.arange(combeDelaysNrs):
+        combFilterParams[n] = 10**(-3*combDelays[n]/(reverbTime*samplingFreq))
+    return combFilterParams
 
 
+#Line 66-71 have to be run before the reverb function, in order to initialise the inputs needed for it
 
-mixingParams = np.array([0.3, 0.25, 0.25, 0.20])
-plainDelays = np.array([1553, 1613, 1493, 1153])
-allpassDelays = np.array([223, 443])
-apParams = np.array([-0.7, -0.7])
-reverbTime = 0.7 # seconds
-plainParams = plainGainFromReverbTime(reverbTime, plainDelays, samplef)
+mixingParams = np.array([0.3, 0.25, 0.25, 0.20]) # they need sum to 1
+combDelays = np.array([1553, 1613, 1493, 1153]) # they need to be large and have mutually prime numbers
+allPassDelays = np.array([223, 443]) # they need to be small
+allPassParams = np.array([-0.7, -0.7]) # they need to not be close to 1
+reverbTime = 0.7 # by making this bigger, the effect seems stronger
+combFilterParams = combFiltersParametersFromReverbTime(reverbTime, combDelays, samplef)
 
-sd.play(reverb(signal, mixingParams, plainDelays, plainParams, allpassDelays, apParams), samplef)
-#sd.play(signal,samplef)
-sd.wait()
-
-
-# sd.play(combfilter(signal, samplef, 0.5, 0.15), samplef)
-# sd.wait()
-# sd.play(allpassfilter(signal, samplef, 0.5), samplef)
-# sd.wait()
-# plt.plot(allpassfilter(signal, samplef, 0.5, 0.5))
-# plt.show()
