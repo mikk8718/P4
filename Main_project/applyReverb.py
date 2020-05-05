@@ -56,7 +56,7 @@ def createCombFiltersParams(reverbTime, combDelays, samplingFreq):
 
 
 def applyReverb(inputSignal, sampleFreq, strength):
-    inputSignal = max(inputSignal)
+    inputSignal = inputSignal/max(inputSignal)
     mixingParams = np.array([0.3, 0.25, 0.25, 0.20])  # they need sum to 1
     combDelays = np.array([1553, 1613, 1493, 1153])  # they need to be large and have mutually prime numbers
     allPassDelays = np.array([223, 443])  # they need to be small
@@ -70,6 +70,5 @@ def applyReverb(inputSignal, sampleFreq, strength):
         reverbTime = 1.2
         combFilterParams = createCombFiltersParams(reverbTime, combDelays, sampleFreq)
         return reverb(inputSignal, mixingParams, combDelays, combFilterParams, allPassDelays, allPassParams)
-
 
 

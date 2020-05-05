@@ -1,8 +1,6 @@
-import sounddevice as sd
-import scipy.io.wavfile as wave
 import numpy as np
-
-from numpy import array
+import scipy.io.wavfile as wave
+import sounddevice as sd
 
 sampleFreq, audioData = wave.read("testfile.wav")
 feedBackIsUsed=True
