@@ -5,68 +5,68 @@ import numpy as np
 
 
 samplef, signal = wave.read("guitar.wav")
-sd.play(signal, samplef)
-sd.wait()
+signal = signal/2**15 # normalise
 
-def combfilter(inputSignal, samplingFreq, filterCoefficient, delay):
-    d = np.int(np.round(delay*samplingFreq))
+def combfilter(inputSignal, filterCoefficient, delay):
+    #d = np.int(np.round(delay*samplingFreq))
     signalLenght = np.size(inputSignal)
-    outputSignal = np.zeros(signalLenght, dtype='int16')
+    outputSignal = np.zeros(signalLenght)
 
     for n in np.arange(signalLenght):
-        if n < d:
+        if n < delay:
             outputSignal[n] = inputSignal[n]
         else:
-            outputSignal[n] = inputSignal[n]+filterCoefficient*outputSignal[n-d]
+            outputSignal[n] = inputSignal[n]+filterCoefficient*outputSignal[n-delay]
 
-    return outputSignal / max(outputSignal)
+    return outputSignal
 
 
-def allpassfilter(inputSignal, samplingFreq, filterCoefficient, delay):
-    d = np.int(np.round(delay * samplingFreq))
+def allpassfilter(inputSignal, filterCoefficient, delay):
+    #d = np.int(np.round(delay * samplingFreq))
     signalLenght = np.size(inputSignal)
-    outputSignal = np.zeros(signalLenght, dtype='int16')
+    outputSignal = np.zeros(signalLenght)
     #print(d)
     for n in np.arange(signalLenght):
-        if n < d:
+        if n < delay:
             outputSignal[n] = inputSignal[n]
         else:
-            outputSignal[n] = filterCoefficient * inputSignal[n] + inputSignal[n - d] - filterCoefficient * outputSignal[n - d]
+            outputSignal[n] = filterCoefficient * inputSignal[n] + inputSignal[n - delay] - filterCoefficient * outputSignal[n - delay]
 
-    return outputSignal / max(outputSignal)
+    return outputSignal
 
 
 def reverb(inputSignal, mixingParameters, combDelays, combFilterParams, allPassDelays, allPassParams):
     signalLenght = np.size(inputSignal)
-    outputSignal = np.zeros(signalLenght, dtype='int16')
-    combFiltersNrs = np.size(combDelays)
+    outputSignal = np.zeros(signalLenght)
 
+    combFiltersNrs = np.size(combDelays)
     for n in np.arange(combFiltersNrs):
-        outputSignal = outputSignal + mixingParameters[n] * combfilter(inputSignal, 44100, combFilterParams[n], combDelays[n])
+        outputSignal = outputSignal + mixingParameters[n] * combfilter(inputSignal, combFilterParams[n], combDelays[n])
 
     allPassFilterNrs = np.size(allPassDelays)
     for n in np.arange(allPassFilterNrs):
-        outputSignal = allpassfilter(inputSignal, 44100, allPassParams[n], allPassDelays[n])
+        outputSignal = allpassfilter(outputSignal, allPassParams[n], allPassDelays[n])
 
-    return outputSignal / max(outputSignal)
-
+    return outputSignal
 
 def plainGainFromReverbTime(reverbTime, plainDelay, samplingFreq):
     nDelays = np.size(plainDelay)
     plainGains = np.zeros(nDelays)
     for ii in np.arange(nDelays):
-        plainGains[ii] = 10*(-3*plainDelays[ii]/(reverbTime*samplingFreq))
+        plainGains[ii] = 10**(-3*plainDelay[ii]/(reverbTime*samplingFreq))
     return plainGains
 
 
-mixingParams = np.array([0.3, 0.25, 0.25, 0.20]) # numbers taken from a table in the book
-plainDelays = np.array([1553, 1613, 1493, 1153]) # numbers taken from a table in the book (H1-H4)
-allpassDelays = np.array([223, 443]) # numbers taken from a table in the book (H5, H6)
+
+mixingParams = np.array([0.3, 0.25, 0.25, 0.20])
+plainDelays = np.array([1553, 1613, 1493, 1153])
+allpassDelays = np.array([223, 443])
 apParams = np.array([-0.7, -0.7])
 reverbTime = 0.7 # seconds
-plainParams = plainGainFromReverbTime(0.7, plainDelays, samplef)
+plainParams = plainGainFromReverbTime(reverbTime, plainDelays, samplef)
 
 sd.play(reverb(signal, mixingParams, plainDelays, plainParams, allpassDelays, apParams), samplef)
+#sd.play(signal,samplef)
 sd.wait()
 
 
