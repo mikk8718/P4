@@ -1,13 +1,7 @@
-import sounddevice as sd
-import scipy.io.wavfile as wave
 import numpy as np
 
 
-#delay, in all the functions, has to be given in amount of samples, not ms.
-
-#Lines 9-10 are for testing purpose, remove when using in main
-samplef, signal = wave.read("guitar.wav")
-signal = signal/max(signal) #normalizing the signal
+#delay, in all the functions, has to be given in amount of samples, not ms!
 
 
 def combfilter(inputSignal, filterCoefficient, delay):
@@ -53,7 +47,7 @@ def reverb(inputSignal, mixingParameters, combDelays, combFilterParams, allPassD
     return outputSignal
 
 
-def combFiltersParametersFromReverbTime(reverbTime, combDelays, samplingFreq):
+def createCombFiltersParams(reverbTime, combDelays, samplingFreq):
     combeDelaysNrs = np.size(combDelays)
     combFilterParams = np.zeros(combeDelaysNrs)
     for n in np.arange(combeDelaysNrs):
@@ -61,12 +55,20 @@ def combFiltersParametersFromReverbTime(reverbTime, combDelays, samplingFreq):
     return combFilterParams
 
 
-#Line 66-71 have to be run before the reverb function, in order to initialise the inputs needed for it
+def applyReverb(inputSignal, sampleFreq, strength):
+    mixingParams = np.array([0.3, 0.25, 0.25, 0.20])  # they need sum to 1
+    combDelays = np.array([1553, 1613, 1493, 1153])  # they need to be large and have mutually prime numbers
+    allPassDelays = np.array([223, 443])  # they need to be small
+    allPassParams = np.array([-0.7, -0.7])  # they need to not be close to 1
 
-mixingParams = np.array([0.3, 0.25, 0.25, 0.20]) # they need sum to 1
-combDelays = np.array([1553, 1613, 1493, 1153]) # they need to be large and have mutually prime numbers
-allPassDelays = np.array([223, 443]) # they need to be small
-allPassParams = np.array([-0.7, -0.7]) # they need to not be close to 1
-reverbTime = 0.7 # by making this bigger, the effect seems stronger
-combFilterParams = combFiltersParametersFromReverbTime(reverbTime, combDelays, samplef)
+    if strength == 1:
+        reverbTime = 0.7
+        combFilterParams = createCombFiltersParams(reverbTime, combDelays, sampleFreq)
+        return reverb(inputSignal, mixingParams, combDelays, combFilterParams, allPassDelays, allPassParams)
+    if strength == 2:
+        reverbTime = 1.2
+        combFilterParams = createCombFiltersParams(reverbTime, combDelays, sampleFreq)
+        return reverb(inputSignal, mixingParams, combDelays, combFilterParams, allPassDelays, allPassParams)
+
+
 
