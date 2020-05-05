@@ -1,10 +1,10 @@
 import sounddevice as sd
 import scipy.io.wavfile as wave
 import numpy as np
-import matplotlib.pyplot as plt
 
 
-samplef, signal = wave.read("testfile.wav")
+
+samplef, signal = wave.read("guitar.wav")
 
 
 def combfilter(inputSignal, samplingFreq, filterCoefficient, delay):
@@ -21,21 +21,21 @@ def combfilter(inputSignal, samplingFreq, filterCoefficient, delay):
     return outputSignal/max(outputSignal)
 
 
-def allpassfilter(inputSignal, samplingFreq, filterCoefficient):
-    # d = np.int(np.round(delay * samplingFreq))
+def allpassfilter(inputSignal, samplingFreq, filterCoefficient, delay):
+    d = np.int(np.round(delay * samplingFreq))
     signalLenght = np.size(inputSignal)
     outputSignal = np.zeros(signalLenght, dtype='int16')
-    # print(d)
+    #print(d)
     for n in np.arange(signalLenght):
-        if n < 1:
+        if n < d:
             outputSignal[n] = inputSignal[n]
         else:
-            outputSignal[n] = filterCoefficient * inputSignal[n] + inputSignal[n - 1] - filterCoefficient * outputSignal[n - 1]
+            outputSignal[n] = filterCoefficient * inputSignal[n] + inputSignal[n - d] - filterCoefficient * outputSignal[n - d]
 
     return outputSignal / max(outputSignal)
 
 
-def reverb(inputSignal, samplingFreq, mixingParameters, combDelays, combFilterParams, allPassDelays, allPassParams):
+def reverb(inputSignal, mixingParameters, combDelays, combFilterParams, allPassDelays, allPassParams):
     signalLenght = np.size(inputSignal)
     outputSignal = np.zeros(signalLenght, dtype='int16')
     combFiltersNrs = np.size(combDelays)
@@ -45,7 +45,7 @@ def reverb(inputSignal, samplingFreq, mixingParameters, combDelays, combFilterPa
 
     allPassFilterNrs = np.size(allPassDelays)
     for n in np.arange(allPassFilterNrs):
-        outputSignal = allpassfilter(inputSignal, 44100, allPassParams[n])
+        outputSignal = allpassfilter(inputSignal, 44100, allPassParams[n], allPassDelays[n])
 
     return outputSignal / max(outputSignal)
 
@@ -64,9 +64,7 @@ apParams = np.array([-0.7, -0.7])
 reverbTime = 0.7 # seconds
 plainParams = plainGainFromReverbTime(0.7, plainDelays, samplef)
 
-a = reverb(signal, samplef, mixingParams, plainDelays, plainParams, allpassDelays, apParams)
-
-sd.play(a, samplef)
+sd.play(reverb(signal, mixingParams, plainDelays, plainParams, allpassDelays, apParams), samplef)
 sd.wait()
 
 # sd.play(combfilter(signal, samplef, 0.5, 0.15), samplef)
