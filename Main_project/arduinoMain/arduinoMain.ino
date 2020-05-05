@@ -1,6 +1,4 @@
-#include <SoftwareSerial.h>
 #include <LiquidCrystal.h>
-SoftwareSerial mySerial(11, 10);
 
 int potPinLCD = A1;
 int potPinVol = A5;
