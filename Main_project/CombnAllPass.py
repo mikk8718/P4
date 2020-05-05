@@ -5,7 +5,8 @@ import numpy as np
 
 
 samplef, signal = wave.read("guitar.wav")
-
+sd.play(signal, samplef)
+sd.wait()
 
 def combfilter(inputSignal, samplingFreq, filterCoefficient, delay):
     d = np.int(np.round(delay*samplingFreq))
@@ -49,6 +50,7 @@ def reverb(inputSignal, mixingParameters, combDelays, combFilterParams, allPassD
 
     return outputSignal / max(outputSignal)
 
+
 def plainGainFromReverbTime(reverbTime, plainDelay, samplingFreq):
     nDelays = np.size(plainDelay)
     plainGains = np.zeros(nDelays)
@@ -57,10 +59,9 @@ def plainGainFromReverbTime(reverbTime, plainDelay, samplingFreq):
     return plainGains
 
 
-
-mixingParams = np.array([0.3, 0.25, 0.25, 0,20])
-plainDelays = np.array([1553, 1613, 1493, 1153])
-allpassDelays = np.array([223, 443])
+mixingParams = np.array([0.3, 0.25, 0.25, 0.20]) # numbers taken from a table in the book
+plainDelays = np.array([1553, 1613, 1493, 1153]) # numbers taken from a table in the book (H1-H4)
+allpassDelays = np.array([223, 443]) # numbers taken from a table in the book (H5, H6)
 apParams = np.array([-0.7, -0.7])
 reverbTime = 0.7 # seconds
 plainParams = plainGainFromReverbTime(0.7, plainDelays, samplef)
