@@ -66,7 +66,11 @@ def applyReverb(inputSignal, sampleFreq, strength):
         reverbTime = 0.7
         combFilterParams = createCombFiltersParams(reverbTime, combDelays, sampleFreq)
         return reverb(inputSignal, mixingParams, combDelays, combFilterParams, allPassDelays, allPassParams)
-    if strength == 2:
+
+    elif strength == 2:
+        return inputSignal
+
+    elif strength == 3:
         reverbTime = 1.2
         combFilterParams = createCombFiltersParams(reverbTime, combDelays, sampleFreq)
         return reverb(inputSignal, mixingParams, combDelays, combFilterParams, allPassDelays, allPassParams)
