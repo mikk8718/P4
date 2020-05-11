@@ -2,13 +2,13 @@
 
 int potPinLCD = A1;
 int potPinVol = A5;
-int potPinEcho = A3;
+int potPinReverb = A3;
 int potPinPitch = A4;
 LiquidCrystal lcd(12, 9, 5, 4, 3, 2);
 int button = 8;
 int button2 = 7;
 int selectedTrack;
-int selectedEcho;
+int selectedReverb;
 int selectedPitch;
 int selectedVol;
 
@@ -23,11 +23,11 @@ void setup() {
 void loop() {
   int valPotLCD = 0;
   int valPotVol = 0;
-  int valPotEcho = 0;
+  int valPotReverb = 0;
   int valPotPitch = 0;
   valPotLCD = analogRead(potPinLCD);
   valPotVol = analogRead(potPinVol);
-  valPotEcho = analogRead(potPinEcho);
+  valPotReverb = analogRead(potPinReverb);
   valPotPitch = analogRead(potPinPitch); //Value goes from 0 to 1023 with potentiometers
   //From here we treshhold values from the slider to display text on the LCD.
   //However due to a 1k resistor being attached to the slider, the first threshold is larger
@@ -61,15 +61,15 @@ void loop() {
       selectedVol = 3;
    }
    
-//Echo----------------------------------------
- if (valPotEcho > 0 && valPotEcho < 341){
-    selectedEcho = 1;
+//Reverb----------------------------------------
+ if (valPotReverb > 0 && valPotReverb < 341){
+    selectedReverb = 1;
  }
- if (valPotEcho > 341 && valPotEcho < 682){
-    selectedEcho = 2;
+ if (valPotReverb > 341 && valPotReverb < 682){
+    selectedReverb = 2;
  }
- if (valPotEcho > 682 && valPotEcho < 1023){
-    selectedEcho = 3;
+ if (valPotReverb > 682 && valPotReverb < 1023){
+    selectedReverb = 3;
  }
 
 //Pitch---------------------------------------
@@ -88,8 +88,8 @@ void loop() {
     Serial.println(selectedTrack);
     Serial.print("selectedVol");
     Serial.println(selectedVol);
-    Serial.print("selectedEcho");
-    Serial.println(selectedEcho);
+    Serial.print("selectedReverb");
+    Serial.println(selectedReverb);
     Serial.print("selectedPitch");
     Serial.println(selectedPitch);
     Serial.print("playButton");

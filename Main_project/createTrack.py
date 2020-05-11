@@ -4,9 +4,9 @@ import scipy.io.wavfile as wave
 #This comment is added in order to let me push :)
 
 #Tracks are read here
-samplingFreq1, signal1 = wave.read("testfile.wav")
-samplingFreq2, signal2 = wave.read("testfile.wav")
-samplingFreq3, signal3 = wave.read("testfile.wav")
+samplingFreq1, signal1 = wave.read("torch.wav")
+samplingFreq2, signal2 = wave.read("swords.wav")
+samplingFreq3, signal3 = wave.read("somesickassfootsteps.wav")
 
 #Copy is created here
 def createTrack(sliderSong):
