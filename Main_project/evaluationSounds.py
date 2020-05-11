@@ -3,10 +3,11 @@ import scipy.io.wavfile as wave
 from Main_project.applyReverb import applyReverb
 from Main_project.changePitch import *
 
-sampFreq, signal = wave.read("footsteps.wav")
+sampFreq, signal = wave.read("torch.wav")
 
 
-outputSignal = applyReverb(signal, sampFreq, 1)
+#outputSignal1 = applyReverb(signal, sampFreq, 2)
+outputSignal2 = pitch(signal, 0.8)
 #sd.play(outputSignal, sampFreq)
 #sd.wait()
-wave.write("lowReverbFootsteps.wav", sampFreq, outputSignal)
+wave.write("lowPitchTorch.wav", sampFreq, outputSignal2)
