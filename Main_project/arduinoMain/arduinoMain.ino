@@ -10,7 +10,7 @@ int button2 = 7;
 int selectedTrack;
 int selectedReverb;
 int selectedPitch;
-int selectedVol;
+
 
 void setup() {
     Serial.begin(115200); //this is the rate for the serial monitor, can be changed, doesn't matter much.
@@ -20,13 +20,12 @@ void setup() {
     delay(1000);
    
 }
+
 void loop() {
   int valPotLCD = 0;
-  int valPotVol = 0;
   int valPotReverb = 0;
   int valPotPitch = 0;
   valPotLCD = analogRead(potPinLCD);
-  valPotVol = analogRead(potPinVol);
   valPotReverb = analogRead(potPinReverb);
   valPotPitch = analogRead(potPinPitch); //Value goes from 0 to 1023 with potentiometers
   //From here we treshhold values from the slider to display text on the LCD.
@@ -49,18 +48,7 @@ void loop() {
     lcd.setCursor(0, 1);
     lcd.print("Mikkel track   ");
   }
-//Volume-------------------------------------
-
-   if (valPotVol > 0 && valPotVol < 341){
-      selectedVol = 1;
-   }
-   if (valPotVol > 341 && valPotVol < 682){
-      selectedVol = 2;
-   }
-   if (valPotVol > 682 && valPotVol < 1023){
-      selectedVol = 3;
-   }
-   
+    
 //Reverb----------------------------------------
  if (valPotReverb > 0 && valPotReverb < 341){
     selectedReverb = 1;
