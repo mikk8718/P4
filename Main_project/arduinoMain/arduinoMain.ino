@@ -13,8 +13,8 @@ int selectedPitch;
 
 
 void setup() {
-    Serial.begin(115200); //this is the rate for the serial monitor, can be changed, doesn't matter much.
-    lcd.begin(16, 2); //This is the LCD (Collums, Rows) so max 16 letters per row.
+    Serial.begin(115200); 
+    lcd.begin(16, 2); 
     pinMode(button, INPUT);
     pinMode(button2, INPUT);
     delay(1000);
@@ -27,11 +27,8 @@ void loop() {
   int valPotPitch = 0;
   valPotLCD = analogRead(potPinLCD);
   valPotReverb = analogRead(potPinReverb);
-  valPotPitch = analogRead(potPinPitch); //Value goes from 0 to 1023 with potentiometers
-  //From here we treshhold values from the slider to display text on the LCD.
-  //However due to a 1k resistor being attached to the slider, the first threshold is larger
-  //Than the other... IDK if this is why, but my best guess. (It should change around 1/3 of the way for each.
-
+  valPotPitch = analogRead(potPinPitch); 
+  
 //LCD------------------------------------
   if (valPotLCD > 0 && valPotLCD < 150){
     selectedTrack = 3;
