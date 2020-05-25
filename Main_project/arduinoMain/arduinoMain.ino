@@ -33,17 +33,17 @@ void loop() {
   if (valPotLCD > 0 && valPotLCD < 150){
     selectedTrack = 3;
     lcd.setCursor(0, 1);
-    lcd.print("Adventure track ");
+    lcd.print("Torch ");
   }
   if (valPotLCD > 150 && valPotLCD < 275){
     selectedTrack = 2;
     lcd.setCursor(0, 1);
-    lcd.print("Journey track   ");
+    lcd.print("Swords   ");
   }
   if (valPotLCD > 275 && valPotLCD < 1023){
     selectedTrack = 1;
     lcd.setCursor(0, 1);
-    lcd.print("Mikkel track   ");
+    lcd.print("Footsteps   ");
   }
     
 //Reverb----------------------------------------
