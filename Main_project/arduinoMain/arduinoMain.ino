@@ -31,7 +31,7 @@ void loop() {
   
 //LCD------------------------------------
   if (valPotLCD > 0 && valPotLCD < 150){
-    selectedTrack = 3;
+    selectedTrack = 1;
     lcd.setCursor(0, 1);
     lcd.print("Torch ");
   }
@@ -41,7 +41,7 @@ void loop() {
     lcd.print("Swords   ");
   }
   if (valPotLCD > 275 && valPotLCD < 1023){
-    selectedTrack = 1;
+    selectedTrack = 3;
     lcd.setCursor(0, 1);
     lcd.print("Footsteps   ");
   }
