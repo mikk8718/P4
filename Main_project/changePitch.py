@@ -1,5 +1,3 @@
-import scipy.io.wavfile as wave
-import sounddevice as sd
 import numpy as np
 
 def pitch(inputSignal, factor):

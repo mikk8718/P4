@@ -1,12 +1,9 @@
-import sounddevice as sd
 import scipy.io.wavfile as wave
-
-#This comment is added in order to let me push :)
 
 #Tracks are read here
 samplingFreq1, signal1 = wave.read("torch.wav")
 samplingFreq2, signal2 = wave.read("swords.wav")
-samplingFreq3, signal3 = wave.read("somesickassfootsteps.wav")
+samplingFreq3, signal3 = wave.read("footsteps.wav")
 
 #Copy is created here
 def createTrack(sliderSong):
